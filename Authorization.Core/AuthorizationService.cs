@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Authorization.Abstraction.Authorization;
+﻿using Authorization.Abstractions.Authorization;
 using Authorization.Contracts.Authorization;
 using Authorization.Entities.Entities;
 using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Authorization.Core
 {

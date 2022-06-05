@@ -1,9 +1,9 @@
-﻿using Authorization.Abstraction.Authorization;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Authorization.Abstractions.Authorization;
 using Authorization.Entities.Entities;
 
 namespace Authorization.Sql

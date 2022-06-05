@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Authorization.Abstraction.Authorization;
+using Authorization.Abstractions.Authorization;
 
 namespace Authorization.Controllers
 {

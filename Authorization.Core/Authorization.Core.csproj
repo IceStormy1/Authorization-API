@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Authorization.Abstraction\Authorization.Abstraction.csproj" />
-    <ProjectReference Include="..\Authorization.Contract\Authorization.Contracts.csproj" />
+    <ProjectReference Include="..\Authorization.Abstractions\Authorization.Abstractions.csproj" />
+    <ProjectReference Include="..\Authorization.Contracts\Authorization.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

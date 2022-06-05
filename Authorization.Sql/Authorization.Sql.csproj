@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Authorization.Abstraction\Authorization.Abstraction.csproj" />
+    <ProjectReference Include="..\Authorization.Abstractions\Authorization.Abstractions.csproj" />
     <ProjectReference Include="..\Authorization.Entities\Authorization.Entities.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿using Authorization.Abstraction.Authorization;
+﻿using Authorization.Abstractions.Authorization;
 using Authorization.Core;
 using Authorization.Sql;
 using Autofac;
