@@ -11,6 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Sql", "Author
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Abstraction", "Authorization.Abstraction\Authorization.Abstraction.csproj", "{669E3AF6-32FE-489B-93B4-5AA72E73F67D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{EF7F924E-B432-49EA-987E-1F75E6F5BB70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Entities", "Authorization.Entities\Authorization.Entities.csproj", "{20D70A3B-43F6-4B20-A080-B26B69557820}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Core", "Authorization.Core\Authorization.Core.csproj", "{BC75539C-CB98-43CD-86F4-ACEF50901992}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +39,22 @@ Global
 		{669E3AF6-32FE-489B-93B4-5AA72E73F67D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{669E3AF6-32FE-489B-93B4-5AA72E73F67D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{669E3AF6-32FE-489B-93B4-5AA72E73F67D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20D70A3B-43F6-4B20-A080-B26B69557820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D70A3B-43F6-4B20-A080-B26B69557820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D70A3B-43F6-4B20-A080-B26B69557820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D70A3B-43F6-4B20-A080-B26B69557820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC75539C-CB98-43CD-86F4-ACEF50901992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC75539C-CB98-43CD-86F4-ACEF50901992}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC75539C-CB98-43CD-86F4-ACEF50901992}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC75539C-CB98-43CD-86F4-ACEF50901992}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{669E3AF6-32FE-489B-93B4-5AA72E73F67D} = {EF7F924E-B432-49EA-987E-1F75E6F5BB70}
+		{20D70A3B-43F6-4B20-A080-B26B69557820} = {EF7F924E-B432-49EA-987E-1F75E6F5BB70}
+		{BC75539C-CB98-43CD-86F4-ACEF50901992} = {EF7F924E-B432-49EA-987E-1F75E6F5BB70}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72460E75-4CEB-434E-850B-850A06BBFF52}
