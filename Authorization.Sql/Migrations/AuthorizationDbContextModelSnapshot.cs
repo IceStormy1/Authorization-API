@@ -19,7 +19,7 @@ namespace Authorization.Sql.Authorization.Migrations
                 .HasAnnotation("ProductVersion", "5.0.16")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("Authorization.Sql.Entities.User", b =>
+            modelBuilder.Entity("Authorization.Sql.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

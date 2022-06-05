@@ -1,11 +1,11 @@
-﻿using Authorization.Sql.Entities;
+﻿using Authorization.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Authorization.Sql
 {
     public class AuthorizationDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserEntity> Users { get; set; }
 
         public AuthorizationDbContext(DbContextOptions<AuthorizationDbContext> options) : base(options)
         {
@@ -15,7 +15,7 @@ namespace Authorization.Sql
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>(e =>
+            modelBuilder.Entity<UserEntity>(e =>
             {
                 e.HasKey(x => x.Id);
             });

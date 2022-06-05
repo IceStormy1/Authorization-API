@@ -19,4 +19,9 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Authorization.Abstraction\Authorization.Abstraction.csproj" />
+    <ProjectReference Include="..\Authorization.Entities\Authorization.Entities.csproj" />
+  </ItemGroup>
+
 </Project>
