@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Authorization.Contract.Authorization
+namespace Authorization.Contracts.Authorization
 {
-    public class User
+    public class UserModel
     {
         /// <summary>
         /// Идентификатор пользователя
