@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Authorization.Sql.Entities
+namespace Authorization.Entities.Entities
 {
-    public class User
+    public class UserEntity
     {
         /// <summary>
         /// Идентификатор пользователя
