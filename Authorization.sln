@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization", "Authorization\Authorization.csproj", "{9ED6E788-DDC5-421F-9647-93D3724A8EBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization", "Authorization\Authorization.csproj", "{9ED6E788-DDC5-421F-9647-93D3724A8EBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Contract", "Authorization.Contract\Authorization.Contract.csproj", "{DC90685C-47CD-4381-A218-F4B50B864E11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Contracts", "Authorization.Contract\Authorization.Contracts.csproj", "{DC90685C-47CD-4381-A218-F4B50B864E11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Sql", "Authorization.Sql\Authorization.Sql.csproj", "{145D66E5-D815-4B34-8F65-B68CEF559AFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Sql", "Authorization.Sql\Authorization.Sql.csproj", "{145D66E5-D815-4B34-8F65-B68CEF559AFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Abstraction", "Authorization.Abstraction\Authorization.Abstraction.csproj", "{669E3AF6-32FE-489B-93B4-5AA72E73F67D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Abstraction", "Authorization.Abstraction\Authorization.Abstraction.csproj", "{669E3AF6-32FE-489B-93B4-5AA72E73F67D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
