@@ -1,21 +1,16 @@
+using Authorization.Sql;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Authorization.Sql;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System;
+using System.IO;
 
 namespace Authorization
 {
@@ -46,6 +41,8 @@ namespace Authorization
                     cfg.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     cfg.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 });
+
+            services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfile).Assembly));
 
             services.AddSwaggerGen(c =>
             {
@@ -95,6 +92,11 @@ namespace Authorization
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule<Module>();
         }
     }
 }
