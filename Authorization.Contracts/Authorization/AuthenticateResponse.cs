@@ -1,6 +1,6 @@
 ﻿namespace Authorization.Contracts.Authorization
 {
-    public class AuthenticateResponse : UserModel
+    public class AuthenticateResponse
     {
         /// <summary>
         /// Токен

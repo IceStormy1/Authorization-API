@@ -1,6 +1,6 @@
 ﻿namespace Authorization.Contracts.Authorization
 {
-    public class AuthenticateRequest : UserBase
+    public class AuthenticateParameters : UserBase
     {
         
     }

@@ -22,10 +22,12 @@ namespace Authorization.Sql
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.Id == userId);
 
-        public async Task<UserEntity> GetUserByUserName(string userName)
+        public async Task<UserEntity> FindUser(string userName, string password)
             => await _authorizationDbContext.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => string.Equals(user.UserName, userName) || string.Equals(user.Email, userName));
+                .FirstOrDefaultAsync(user => string.Equals(password, user.Password)
+                                             && (string.Equals(user.UserName, userName)
+                                                 || string.Equals(user.Email, userName)));
 
         public async Task<IReadOnlyCollection<UserEntity>> GetUsers()
             => await _authorizationDbContext.Users

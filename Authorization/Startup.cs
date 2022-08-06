@@ -1,3 +1,4 @@
+using Authorization.Abstractions.Jwt;
 using Authorization.Sql;
 using Autofac;
 using Microsoft.AspNetCore.Builder;
@@ -27,10 +28,8 @@ namespace Authorization
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // database registrations
             services.AddAllDbContext(Configuration);
 
             services.AddRouting(c => c.LowercaseUrls = true);
@@ -58,16 +57,32 @@ namespace Authorization
                 foreach (var fileName in xmlContractDocs) c.IncludeXmlComments(fileName);
             });
 
+            services.Configure<JwtOptions>(Configuration.GetSection("Auth"));
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+
             services.AddMemoryCache();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors(options =>
+            {
+                options.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
 
             app.UseStatusCodePages();
 
@@ -96,7 +111,7 @@ namespace Authorization
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule<Module>();
+            builder.RegisterModule<Core.Module>();
         }
     }
 }

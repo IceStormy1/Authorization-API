@@ -26,7 +26,7 @@ namespace Authorization.Controllers
         [HttpPost("registration")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Registration(UserParameters parameters)
+        public async Task<IActionResult> Registration([FromBody] UserParameters parameters)
         {
             var (isSuccess, userId) = await _authorizationService.CreateUser(parameters);
 
@@ -69,6 +69,24 @@ namespace Authorization.Controllers
         public async Task<IActionResult> GetUsersByParameters()
         {
             return Ok(await _authorizationService.GetUsers());
+        }
+
+        /// <summary>
+        /// Регистрирует нового пользователя
+        /// </summary>
+        /// <response code="200">В случае успешной регистрации</response>
+        /// <response code="400">В случае ошибок валидации</response>
+        [AllowAnonymous]
+        [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Login([FromBody] AuthenticateParameters parameters)
+        {
+            var authenticateResult = await _authorizationService.Authorize(parameters);
+
+            return authenticateResult is null
+                ? Unauthorized("Неверный логин или пароль")
+                : Ok(authenticateResult);
         }
     }
 }

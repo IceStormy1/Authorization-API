@@ -16,13 +16,14 @@ namespace Authorization.Abstractions.Authorization
         /// </summary>
         /// <param name="userId">Идентификатор пользователя</param>
         /// <returns>Возвращает данные пользователя</returns>
-        public Task<UserEntity> GetUserById(Guid userId);
-        
+        Task<UserEntity> GetUserById(Guid userId);
+
         /// <summary>
         /// Получить пользователя по его никнейму
         /// </summary>
-        /// <param name="userName"></param>
-        public Task<UserEntity> GetUserByUserName(string userName);
+        /// <param name="userName">Никнейм пользователя</param>
+        /// <param name="password">Пароль пользователя</param>
+        Task<UserEntity> FindUser(string userName, string password);
 
         /// <summary>
         /// Получить список всех пользователей 
@@ -30,7 +31,7 @@ namespace Authorization.Abstractions.Authorization
         /// <remarks>Возвращает первые 300 пользователей отсортированные по никнейму</remarks>
         /// <returns>Список пользователей</returns>
         /// TODO: Добавить параметры фильтрации (пейджинация)
-        public Task<IReadOnlyCollection<UserEntity>> GetUsers();
+        Task<IReadOnlyCollection<UserEntity>> GetUsers();
 
         /// <summary>
         /// Создать пользователя
@@ -40,6 +41,6 @@ namespace Authorization.Abstractions.Authorization
         /// true и идентификатор пользователя при успешном создании пользователя<br/>
         /// false и <b>null</b> если не удалось создать пользователя
         /// </returns>
-        public Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserEntity userEntity);
+        Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserEntity userEntity);
     }
 }
