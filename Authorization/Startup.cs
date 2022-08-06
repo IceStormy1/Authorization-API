@@ -1,12 +1,14 @@
 using Authorization.Abstractions.Jwt;
 using Authorization.Sql;
 using Autofac;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -30,6 +32,29 @@ namespace Authorization
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var jwtOptionsSection = Configuration.GetSection("JwtOptions");
+            services.Configure<JwtOptions>(jwtOptionsSection);
+
+            var jwtOptions = jwtOptionsSection.Get<JwtOptions>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = jwtOptions.Issuer,
+                        ValidateIssuer = true,
+
+                        ValidAudience = jwtOptions.Audience,
+                        ValidateAudience = true,
+
+                        IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(), // HS256
+                        ValidateIssuerSigningKey = true,
+
+                        ValidateLifetime = true
+                    };
+                });
+
             services.AddAllDbContext(Configuration);
 
             services.AddRouting(c => c.LowercaseUrls = true);
@@ -56,8 +81,6 @@ namespace Authorization
                 var xmlContractDocs = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory), "*.xml");
                 foreach (var fileName in xmlContractDocs) c.IncludeXmlComments(fileName);
             });
-
-            services.Configure<JwtOptions>(Configuration.GetSection("Auth"));
 
             services.AddCors(options =>
             {

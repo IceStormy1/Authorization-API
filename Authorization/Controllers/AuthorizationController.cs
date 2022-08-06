@@ -9,8 +9,8 @@ using IAuthorizationService = Authorization.Abstractions.Authorization.IAuthoriz
 namespace Authorization.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class AuthorizationController : ControllerBase
+    [Authorize]
+    public class AuthorizationController : BaseController
     {
         private readonly IAuthorizationService _authorizationService;
 
@@ -62,7 +62,6 @@ namespace Authorization.Controllers
         /// <param name="userId">Идентификатор пользователя</param>
         /// <response code="200">В случае, если пользователь был найден в системе</response>
         /// <response code="404">В случае если пользователь не был найден</response>
-        [Authorize]
         [HttpPost("users")]
         [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
