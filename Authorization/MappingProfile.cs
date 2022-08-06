@@ -1,6 +1,7 @@
 ﻿using Authorization.Contracts.Authorization;
 using Authorization.Entities.Entities;
 using AutoMapper;
+using System;
 
 namespace Authorization
 {
@@ -8,7 +9,11 @@ namespace Authorization
     {
         public MappingProfile()
         {
-            CreateMap<UserModel, UserEntity>().ReverseMap();
+            CreateMap<UserParameters, UserEntity>()
+                .ForMember(destination => destination.DateOfCreate,
+                    options => options.MapFrom(_ => DateTime.UtcNow));
+            CreateMap<UserEntity, UserModel>();
+            CreateMap<UserEntity, AuthenticateResponse>();
         }
     }
 }

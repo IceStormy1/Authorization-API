@@ -1,9 +1,9 @@
 ﻿using Authorization.Abstractions.Authorization;
-using Authorization.Core;
+using Authorization.Core.Authorization;
 using Authorization.Sql;
 using Autofac;
 
-namespace Authorization
+namespace Authorization.Core
 {
     public class Module : Autofac.Module
     {

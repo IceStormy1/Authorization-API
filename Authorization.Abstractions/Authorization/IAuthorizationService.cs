@@ -11,7 +11,7 @@ namespace Authorization.Abstractions.Authorization
         /// Получить пользователя по уникальному идентификатору
         /// </summary>
         /// <param name="userId">Идентификатор пользователя</param>
-        /// <returns>Возвращает данные пользователя</returns>
+        /// <returns>Данные пользователя</returns>
         public Task<UserModel> GetUserById(Guid userId);
 
         /// <summary>
@@ -26,6 +26,6 @@ namespace Authorization.Abstractions.Authorization
         /// </summary>
         /// <param name="user">Данные пользователя</param>
         /// <returns>Возвращает true при успешном создании пользователя</returns>
-        public Task<bool> CreateUser(UserModel user);
+        public Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserParameters user);
     }
 }

@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Authorization.Abstractions.Authorization;
+using Authorization.Entities.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Authorization.Abstractions.Authorization;
-using Authorization.Entities.Entities;
 
 namespace Authorization.Sql
 {
@@ -22,18 +22,31 @@ namespace Authorization.Sql
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.Id == userId);
 
-        public async Task<IList<UserEntity>> GetUsers()
+        public async Task<UserEntity> GetUserByUserName(string userName)
             => await _authorizationDbContext.Users
                 .AsNoTracking()
+                .FirstOrDefaultAsync(user => string.Equals(user.UserName, userName) || string.Equals(user.Email, userName));
+
+        public async Task<IReadOnlyCollection<UserEntity>> GetUsers()
+            => await _authorizationDbContext.Users
+                .AsNoTracking()
+                .OrderBy(x=>x.UserName)
                 .Take(300)
                 .ToListAsync();
 
-        public async Task<bool> CreateUser(UserEntity userEntity)
+        public async Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserEntity userEntity)
         {
+            var user = await _authorizationDbContext.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => string.Equals(userEntity.UserName, user.UserName));
+
+            if (user != null)
+                return (false, null);
+
             _authorizationDbContext.Users.Add(userEntity);
             await _authorizationDbContext.SaveChangesAsync();
 
-            return true;
+            return (true, userEntity.Id);
         }
     }
 }
