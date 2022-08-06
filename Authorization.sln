@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31424.327
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization", "Authorization\Authorization.csproj", "{9ED6E788-DDC5-421F-9647-93D3724A8EBE}"
 EndProject
@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Sql", "Author
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{EF7F924E-B432-49EA-987E-1F75E6F5BB70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Entities", "Authorization.Entities\Authorization.Entities.csproj", "{20D70A3B-43F6-4B20-A080-B26B69557820}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Entities", "Authorization.Entities\Authorization.Entities.csproj", "{20D70A3B-43F6-4B20-A080-B26B69557820}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Core", "Authorization.Core\Authorization.Core.csproj", "{BC75539C-CB98-43CD-86F4-ACEF50901992}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Core", "Authorization.Core\Authorization.Core.csproj", "{BC75539C-CB98-43CD-86F4-ACEF50901992}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Abstractions", "Authorization.Abstractions\Authorization.Abstractions.csproj", "{753DE9F1-418E-4C6A-A252-F879F1EA8C7E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Contracts", "Authorization.Contracts\Authorization.Contracts.csproj", "{DC636AB4-9B6E-492F-8207-45C5FB55EFF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Validation", "Authorization.Validation\Authorization.Validation.csproj", "{915A0CAD-5D8A-43E6-AC17-5212408ACDC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{DC636AB4-9B6E-492F-8207-45C5FB55EFF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC636AB4-9B6E-492F-8207-45C5FB55EFF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC636AB4-9B6E-492F-8207-45C5FB55EFF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{915A0CAD-5D8A-43E6-AC17-5212408ACDC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{915A0CAD-5D8A-43E6-AC17-5212408ACDC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{915A0CAD-5D8A-43E6-AC17-5212408ACDC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{915A0CAD-5D8A-43E6-AC17-5212408ACDC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

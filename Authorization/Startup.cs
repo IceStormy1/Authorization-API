@@ -1,10 +1,14 @@
 using Authorization.Abstractions.Jwt;
 using Authorization.Sql;
+using Authorization.Validation.Authorization;
 using Autofac;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
+using System.Globalization;
 using System.IO;
 
 namespace Authorization
@@ -60,6 +65,20 @@ namespace Authorization
             services.AddRouting(c => c.LowercaseUrls = true);
 
             services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.InvalidModelStateResponseFactory = context =>
+                    {
+                        var problemDetailsFactory =
+                            context.HttpContext.RequestServices.GetRequiredService<ProblemDetailsFactory>();
+                        var problemDetails = problemDetailsFactory
+                            .CreateValidationProblemDetails(context.HttpContext, context.ModelState, statusCode: 400);
+                        problemDetails.Title = "Произошла ошибка валидации!";
+                        var result = new BadRequestObjectResult(problemDetails);
+
+                        return result;
+                    };
+                })
                 .AddNewtonsoftJson(cfg =>
                 {
                     cfg.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -81,6 +100,15 @@ namespace Authorization
                 var xmlContractDocs = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory), "*.xml");
                 foreach (var fileName in xmlContractDocs) c.IncludeXmlComments(fileName);
             });
+
+            services.AddMvc(opt => { opt.EnableEndpointRouting = false; })
+                .AddFluentValidation(fv =>
+                {
+                    fv.RegisterValidatorsFromAssemblyContaining<UserParametersValidator>();
+
+                    fv.ValidatorOptions.LanguageManager.Enabled = true;
+                    fv.ValidatorOptions.LanguageManager.Culture = new CultureInfo("ru-RU");
+                });
 
             services.AddCors(options =>
             {
