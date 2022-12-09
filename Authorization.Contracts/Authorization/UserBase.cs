@@ -24,6 +24,9 @@ namespace Authorization.Contracts.Authorization
         // ReSharper disable once InconsistentNaming
         private static string GetMD5HashPassword(string password)
         {
+            if (string.IsNullOrWhiteSpace(password))
+                return null;
+
             var md5 = MD5.Create();
 
             var bytes = Encoding.ASCII.GetBytes(password);

@@ -53,11 +53,12 @@ namespace Authorization.Core.Authorization
             var userEntity = await _authorizationRepository
                 .FindUser(authenticateParameters.UserName, authenticateParameters.Password);
 
+            if (userEntity == null)
+                return null;
+
             var token = new JwtHelper(_jwtOptions).GenerateJwtToken(userEntity);
 
-            return userEntity is null
-                ? null
-                : new AuthenticateResponse { Token = token };
+            return new AuthenticateResponse { Token = token };
         }
     }
 }

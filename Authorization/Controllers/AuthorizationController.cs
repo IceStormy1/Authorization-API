@@ -67,7 +67,9 @@ namespace Authorization.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUsersByParameters()
         {
-            return Ok(await _authorizationService.GetUsers());
+            var users = await _authorizationService.GetUsers();
+
+            return Ok(users);
         }
 
         /// <summary>
@@ -84,7 +86,7 @@ namespace Authorization.Controllers
             var authenticateResult = await _authorizationService.Authorize(parameters);
 
             return authenticateResult is null
-                ? Unauthorized("Неверный логин или пароль")
+                ? NotFound(new NotFoundObjectResult("Указанный пользователь не найден в системе"))
                 : Ok(authenticateResult);
         }
     }
