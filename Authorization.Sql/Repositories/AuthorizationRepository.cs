@@ -2,11 +2,9 @@
 using Authorization.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Authorization.Sql;
+namespace Authorization.Sql.Repositories;
 
 public class AuthorizationRepository : IAuthorizationRepository
 {
@@ -28,13 +26,6 @@ public class AuthorizationRepository : IAuthorizationRepository
             .FirstOrDefaultAsync(user => string.Equals(password, user.Password)
                                          && (string.Equals(user.UserName, userName)
                                              || string.Equals(user.Email, userName)));
-
-    public async Task<IReadOnlyCollection<UserEntity>> GetUsers()
-        => await _authorizationDbContext.Users
-            .AsNoTracking()
-            .OrderBy(x=>x.UserName)
-            .Take(300)
-            .ToListAsync();
 
     public async Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserEntity userEntity)
     {

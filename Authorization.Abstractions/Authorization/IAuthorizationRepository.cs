@@ -1,6 +1,5 @@
 ﻿using Authorization.Entities.Entities;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Authorization.Abstractions.Authorization;
@@ -24,14 +23,6 @@ public interface IAuthorizationRepository
     /// <param name="userName">Никнейм пользователя</param>
     /// <param name="password">Пароль пользователя</param>
     Task<UserEntity> FindUser(string userName, string password);
-
-    /// <summary>
-    /// Получить список всех пользователей 
-    /// </summary>
-    /// <remarks>Возвращает первые 300 пользователей отсортированные по никнейму</remarks>
-    /// <returns>Список пользователей</returns>
-    /// TODO: Добавить параметры фильтрации (пейджинация)
-    Task<IReadOnlyCollection<UserEntity>> GetUsers();
 
     /// <summary>
     /// Создать пользователя

@@ -14,9 +14,9 @@ public class JwtHelper
 {
     private static JwtOptions _jwtOptions;
 
-    public JwtHelper(JwtOptions jwOptions)
+    public JwtHelper(IOptions<JwtOptions> jwOptions)
     {
-        _jwtOptions = jwOptions;
+        _jwtOptions = jwOptions?.Value;
     }
 
     public string GenerateJwtToken(UserEntity user)

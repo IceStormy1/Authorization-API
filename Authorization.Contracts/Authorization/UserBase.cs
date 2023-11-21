@@ -29,7 +29,7 @@ public abstract class UserBase
 
         var md5 = MD5.Create();
 
-        var bytes = Encoding.ASCII.GetBytes(password);
+        var bytes = Encoding.ASCII.GetBytes(password); 
         var hash = md5.ComputeHash(bytes);
 
         var result = new StringBuilder();

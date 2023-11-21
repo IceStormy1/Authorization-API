@@ -1,9 +1,5 @@
-using Authorization.Abstractions.Jwt;
-using Authorization.Sql;
 using Authorization.Validation.Authorization;
-using Autofac;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +8,14 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.IO;
+using Authorization.Configuration;
+using Authorization.Core;
 
 namespace Authorization;
 
@@ -37,29 +34,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var jwtOptionsSection = Configuration.GetSection("JwtOptions");
-        services.Configure<JwtOptions>(jwtOptionsSection);
-
-        var jwtOptions = jwtOptionsSection.Get<JwtOptions>();
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidateIssuer = true,
-
-                    ValidAudience = jwtOptions.Audience,
-                    ValidateAudience = true,
-
-                    IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(), // HS256
-                    ValidateIssuerSigningKey = true,
-
-                    ValidateLifetime = true
-                };
-            });
-
         services.AddAllDbContext(Configuration);
 
         services.AddRouting(c => c.LowercaseUrls = true);
@@ -120,7 +94,11 @@ public class Startup
             });
         });
 
-        services.AddMemoryCache();
+        services.ConfigureOptions(Configuration)
+            .AddAuth()
+            .AddServices()
+            .AddRepositories()
+            .AddMemoryCache();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -158,10 +136,5 @@ public class Startup
         {
             endpoints.MapControllers();
         });
-    }
-
-    public void ConfigureContainer(ContainerBuilder builder)
-    {
-        builder.RegisterModule<Core.Module>();
     }
 }

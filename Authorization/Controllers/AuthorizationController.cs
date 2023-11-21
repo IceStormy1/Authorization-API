@@ -54,26 +54,8 @@ public class AuthorizationController : BaseController
             : Ok(await _authorizationService.GetUserById(userId));
     }
 
-    //todo: переделать под параметры (пейджинация и поиск)
     /// <summary>
-    /// Возвращает первые 300 пользователей отсортированные по никнейму
-    /// </summary>
-    /// <returns></returns>
-    /// <param name="userId">Идентификатор пользователя</param>
-    /// <response code="200">В случае, если пользователь был найден в системе</response>
-    /// <response code="404">В случае если пользователь не был найден</response>
-    [HttpPost("users")]
-    [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUsersByParameters()
-    {
-        var users = await _authorizationService.GetUsers();
-
-        return Ok(users);
-    }
-
-    /// <summary>
-    /// Регистрирует нового пользователя
+    /// Вход в систему
     /// </summary>
     /// <response code="200">В случае успешной регистрации</response>
     /// <response code="400">В случае ошибок валидации</response>

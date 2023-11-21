@@ -18,7 +18,7 @@
       }
     },
     "Authorization": {
-      "applicationUrl": "http://localhost:5000",
+      "applicationUrl": "http://localhost:5090",
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "environmentVariables": {

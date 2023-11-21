@@ -1,9 +1,9 @@
-﻿using Authorization.Contracts.Authorization;
+﻿using System;
+using Authorization.Contracts.Authorization;
 using Authorization.Entities.Entities;
 using AutoMapper;
-using System;
 
-namespace Authorization;
+namespace Authorization.Core;
 
 public class MappingProfile : Profile
 {
