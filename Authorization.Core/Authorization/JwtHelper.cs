@@ -8,37 +8,36 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace Authorization.Core.Authorization
+namespace Authorization.Core.Authorization;
+
+public class JwtHelper
 {
-    public class JwtHelper
+    private static JwtOptions _jwtOptions;
+
+    public JwtHelper(JwtOptions jwOptions)
     {
-        private static JwtOptions _jwtOptions;
+        _jwtOptions = jwOptions;
+    }
 
-        public JwtHelper(JwtOptions jwOptions)
+    public string GenerateJwtToken(UserEntity user)
+    {
+        var securityKey = _jwtOptions.GetSymmetricSecurityKey();
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        var claims = new List<Claim>
         {
-            _jwtOptions = jwOptions;
-        }
+            new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new (JwtRegisteredClaimNames.Email, user.Email),
+            new (nameof(UserEntity.UserName), user.UserName)
+        };
 
-        public string GenerateJwtToken(UserEntity user)
-        {
-            var securityKey = _jwtOptions.GetSymmetricSecurityKey();
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        var token = new JwtSecurityToken(
+            _jwtOptions.Issuer,
+            _jwtOptions.Audience,
+            claims, 
+            expires: DateTime.UtcNow.AddSeconds(_jwtOptions.TokenLifetime),
+            signingCredentials: credentials);
 
-            var claims = new List<Claim>
-            {
-                new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new (JwtRegisteredClaimNames.Email, user.Email),
-                new (nameof(UserEntity.UserName), user.UserName)
-            };
-
-            var token = new JwtSecurityToken(
-                _jwtOptions.Issuer,
-                _jwtOptions.Audience,
-                claims, 
-                expires: DateTime.UtcNow.AddSeconds(_jwtOptions.TokenLifetime),
-                signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

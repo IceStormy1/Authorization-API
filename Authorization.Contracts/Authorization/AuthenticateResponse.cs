@@ -1,10 +1,9 @@
-﻿namespace Authorization.Contracts.Authorization
+﻿namespace Authorization.Contracts.Authorization;
+
+public class AuthenticateResponse
 {
-    public class AuthenticateResponse
-    {
-        /// <summary>
-        /// Токен
-        /// </summary>
-        public string Token { get; set; }
-    }
+    /// <summary>
+    /// Токен
+    /// </summary>
+    public string Token { get; set; }
 }

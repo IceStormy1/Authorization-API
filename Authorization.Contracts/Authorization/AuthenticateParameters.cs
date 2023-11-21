@@ -1,7 +1,6 @@
-﻿namespace Authorization.Contracts.Authorization
+﻿namespace Authorization.Contracts.Authorization;
+
+public class AuthenticateParameters : UserBase
 {
-    public class AuthenticateParameters : UserBase
-    {
         
-    }
 }

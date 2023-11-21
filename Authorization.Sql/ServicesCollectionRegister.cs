@@ -2,14 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Authorization.Sql
+namespace Authorization.Sql;
+
+public static class ServicesCollectionRegister
 {
-    public static class ServicesCollectionRegister
+    public static void AddAllDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        public static void AddAllDbContext(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContextPool<AuthorizationDbContext>(x
-                => x.UseNpgsql(configuration.GetConnectionString("Authorization")));
-        }
+        services.AddDbContextPool<AuthorizationDbContext>(x
+            => x.UseNpgsql(configuration.GetConnectionString("Authorization")));
     }
 }

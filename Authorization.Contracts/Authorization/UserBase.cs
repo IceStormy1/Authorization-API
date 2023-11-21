@@ -1,43 +1,42 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Authorization.Contracts.Authorization
+namespace Authorization.Contracts.Authorization;
+
+public abstract class UserBase
 {
-    public abstract class UserBase
+    private string _password;
+
+    /// <summary>
+    /// Никнейм пользователя
+    /// </summary>
+    public string UserName { get; set; }
+
+    /// <summary>
+    /// Пароль пользователя
+    /// </summary>
+    public string Password
     {
-        private string _password;
+        get => _password;
+        set => _password = GetMD5HashPassword(value);
+    }
 
-        /// <summary>
-        /// Никнейм пользователя
-        /// </summary>
-        public string UserName { get; set; }
+    // ReSharper disable once InconsistentNaming
+    private static string GetMD5HashPassword(string password)
+    {
+        if (string.IsNullOrWhiteSpace(password))
+            return null;
 
-        /// <summary>
-        /// Пароль пользователя
-        /// </summary>
-        public string Password
-        {
-            get => _password;
-            set => _password = GetMD5HashPassword(value);
-        }
+        var md5 = MD5.Create();
 
-        // ReSharper disable once InconsistentNaming
-        private static string GetMD5HashPassword(string password)
-        {
-            if (string.IsNullOrWhiteSpace(password))
-                return null;
+        var bytes = Encoding.ASCII.GetBytes(password);
+        var hash = md5.ComputeHash(bytes);
 
-            var md5 = MD5.Create();
+        var result = new StringBuilder();
 
-            var bytes = Encoding.ASCII.GetBytes(password);
-            var hash = md5.ComputeHash(bytes);
-
-            var result = new StringBuilder();
-
-            foreach (var b in hash)
-                result.Append(b.ToString("X2"));
+        foreach (var b in hash)
+            result.Append(b.ToString("X2"));
             
-            return result.ToString();
-        }
+        return result.ToString();
     }
 }
