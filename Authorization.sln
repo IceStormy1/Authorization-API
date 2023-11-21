@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization", "Authorizat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Sql", "Authorization.Sql\Authorization.Sql.csproj", "{145D66E5-D815-4B34-8F65-B68CEF559AFF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{EF7F924E-B432-49EA-987E-1F75E6F5BB70}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Entities", "Authorization.Entities\Authorization.Entities.csproj", "{20D70A3B-43F6-4B20-A080-B26B69557820}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Core", "Authorization.Core\Authorization.Core.csproj", "{BC75539C-CB98-43CD-86F4-ACEF50901992}"
@@ -17,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Abstractions"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Contracts", "Authorization.Contracts\Authorization.Contracts.csproj", "{DC636AB4-9B6E-492F-8207-45C5FB55EFF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Validation", "Authorization.Validation\Authorization.Validation.csproj", "{915A0CAD-5D8A-43E6-AC17-5212408ACDC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Validation", "Authorization.Validation\Authorization.Validation.csproj", "{915A0CAD-5D8A-43E6-AC17-5212408ACDC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,11 +54,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{20D70A3B-43F6-4B20-A080-B26B69557820} = {EF7F924E-B432-49EA-987E-1F75E6F5BB70}
-		{BC75539C-CB98-43CD-86F4-ACEF50901992} = {EF7F924E-B432-49EA-987E-1F75E6F5BB70}
-		{753DE9F1-418E-4C6A-A252-F879F1EA8C7E} = {EF7F924E-B432-49EA-987E-1F75E6F5BB70}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72460E75-4CEB-434E-850B-850A06BBFF52}
