@@ -11,16 +11,16 @@ public sealed class MigrationTool
     private readonly IServiceProvider _rootServiceProvider;
     private readonly ILogger<MigrationTool> _logger;
 
-    public static void Execute(IServiceProvider serviceProvider) 
-        => new MigrationTool(serviceProvider).Migrate();
-
     public MigrationTool(IServiceProvider rootServiceProvider)
     {
         _rootServiceProvider = rootServiceProvider;
         _logger = rootServiceProvider.GetRequiredService<ILogger<MigrationTool>>();
     }
 
-    public void Migrate()
+    public static void Execute(IServiceProvider serviceProvider) 
+        => new MigrationTool(serviceProvider).Migrate();
+
+    private void Migrate()
     {
         _logger.LogInformation("Creating scope...");
 
@@ -32,11 +32,15 @@ public sealed class MigrationTool
 
             foreach (var dbContext in dbContextCollection)
             {
-                _logger.LogInformation($"Migrating DbContext '{dbContext.GetType()}'...");
+                _logger.LogInformation("Migrating DbContext '{DbContext}'...", dbContext.GetType());
+#if DEBUG
+                _logger.LogInformation("ConnectionString: {ConnectionString}", dbContext.Database.GetConnectionString());
+#endif
                 dbContext.Database.SetCommandTimeout(TimeSpan.FromMinutes(2));
                 dbContext.Database.Migrate();
                 dbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(30));
-                _logger.LogInformation($"Migrate for DbContext '{dbContext.GetType()}' is complete");
+
+                _logger.LogInformation("Migrate for DbContext '{DbContext}' is complete", dbContext.GetType());
             }
         }
         catch (Exception e)

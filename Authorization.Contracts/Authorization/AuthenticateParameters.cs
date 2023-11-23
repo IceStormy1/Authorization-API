@@ -2,5 +2,5 @@
 
 public class AuthenticateParameters : UserBase
 {
-        
+    public string ReturnUrl { get; set; }
 }

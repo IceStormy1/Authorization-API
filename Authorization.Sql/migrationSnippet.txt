@@ -1,0 +1,4 @@
+cd Authorization.Sql
+
+dotnet ef migrations add UpdateUserTables -s ..\Authorization\ -c AuthorizationDbContext -o .\Migrations\
+dotnet ef migrations remove -s ..\Authorization\ -c AuthorizationDbContext -f

@@ -23,7 +23,7 @@ public class AuthorizationRepository : IAuthorizationRepository
     public async Task<UserEntity> FindUser(string userName, string password)
         => await _authorizationDbContext.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(user => string.Equals(password, user.Password)
+            .FirstOrDefaultAsync(user => string.Equals(password, user.PasswordHash)
                                          && (string.Equals(user.UserName, userName)
                                              || string.Equals(user.Email, userName)));
 

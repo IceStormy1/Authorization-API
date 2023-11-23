@@ -1,21 +1,31 @@
+using Authorization.Configuration;
+using Authorization.Core;
+using Authorization.Core.Authorization;
+using Authorization.Entities.Entities;
+using Authorization.Identity;
+using Authorization.Sql;
 using Authorization.Validation.Authorization;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.IO;
-using Authorization.Configuration;
-using Authorization.Core;
+using Resources = Authorization.Identity.Resources;
 
 namespace Authorization;
 
@@ -28,15 +38,63 @@ public class Startup
     {
         Configuration = configuration;
         _assemblyVersion = new Version(1, 0);
+        IdentityModelEventSource.ShowPII = true;
     }
 
     public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddAllDbContext(Configuration);
+        services.AddIdentity<UserEntity, IdentityRole<Guid>>(options =>
+            {
+                options.User.RequireUniqueEmail = false;
 
-        services.AddRouting(c => c.LowercaseUrls = true);
+                options.Password.RequiredLength = 4;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            })
+            .AddEntityFrameworkStores<AuthorizationDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.AddSameSiteCookiePolicy()
+            .ConfigureApplicationCookie(config =>
+            {
+                config.Cookie.Name = "Auth.IdentityCookie";
+                config.LoginPath = "/Account/Login";
+                config.LogoutPath = "/Account/Logout";
+                config.Cookie.SameSite = SameSiteMode.Lax;
+                config.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            })
+            .ConfigureOptions(Configuration)
+            .AddAllDbContext(Configuration)
+            .AddRouting(c => c.LowercaseUrls = true)
+            .AddIdentityServer(options =>
+            {
+                options.Events.RaiseSuccessEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+
+                options.EmitScopesAsSpaceDelimitedStringInJwt = true;
+
+                options.MutualTls.Enabled = false;
+                options.MutualTls.DomainName = "mtls";
+                options.UserInteraction.LoginUrl = "/Account/Login";
+                options.UserInteraction.LogoutUrl = "/Account/Logout";
+                //options.MutualTls.AlwaysEmitConfirmationClaim = true;
+            })
+            .AddAspNetIdentity<UserEntity>()
+            .AddDeveloperSigningCredential()
+            .AddInMemoryClients(Clients.Get())
+            .AddInMemoryApiResources(ApiResources.Get())
+            .AddInMemoryApiScopes(ApiScopes.Get())
+            .AddInMemoryIdentityResources(Resources.Get())
+            .AddJwtBearerClientAuthentication()
+            .AddAppAuthRedirectUriValidator()
+            .AddProfileService<AuthorizationService>();
+
+        services.AddControllersWithViews();
 
         services.AddControllers()
             .ConfigureApiBehaviorOptions(options =>
@@ -82,7 +140,8 @@ public class Startup
 
                 fv.ValidatorOptions.LanguageManager.Enabled = true;
                 fv.ValidatorOptions.LanguageManager.Culture = new CultureInfo("ru-RU");
-            });
+            })
+            .AddSessionStateTempDataProvider();
 
         services.AddCors(options =>
         {
@@ -94,8 +153,9 @@ public class Startup
             });
         });
 
-        services.ConfigureOptions(Configuration)
-            .AddAuth()
+        services.AddAuth()
+            .AddHttpContextAccessor()
+            .AddSession()
             .AddServices()
             .AddRepositories()
             .AddMemoryCache();
@@ -113,9 +173,34 @@ public class Startup
                 .AllowAnyHeader();
         });
 
+        app.Use(async (context, next) =>
+        {
+            context.Request.EnableBuffering();
+            if (context.Request.Headers.ContainsKey("X-Original-Path"))
+            {
+                context.Request.PathBase = context.Request.Headers["X-Original-Path"].ToString();
+            }
+            await next();
+        });
+
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.All
+        });
+
+        app.UseStaticFiles(
+        //    new StaticFileOptions
+        //{
+        //    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Views/Styles")),
+        //    RequestPath = "/Views/styles"
+        //}
+        );
+
         app.UseStatusCodePages();
 
-        app.UseHttpsRedirection();
+        app.UseIdentityServer();
+
+        app.UseCookiePolicy(new CookiePolicyOptions { Secure = CookieSecurePolicy.Always });
 
         app.UseRouting();
 

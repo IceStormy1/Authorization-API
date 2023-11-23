@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Authorization.Contracts.Authorization;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Authorization.Abstractions.Authorization;
 
-public interface IAuthorizationService
+public interface IAuthorizationService : IProfileService
 {
     /// <summary>
     /// Получить пользователя по уникальному идентификатору
@@ -24,5 +26,5 @@ public interface IAuthorizationService
     /// Авторизация пользователя
     /// </summary>
     /// <param name="authenticateParameters"></param>
-    Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters);
+    Task<SignInResult> Authorize(AuthenticateParameters authenticateParameters);
 }

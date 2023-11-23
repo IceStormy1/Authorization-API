@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Contracts", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Validation", "Authorization.Validation\Authorization.Validation.csproj", "{915A0CAD-5D8A-43E6-AC17-5212408ACDC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization.Configuration", "Authorization.Configuration\Authorization.Configuration.csproj", "{6944C77E-C650-4EAF-A9ED-CD68604D0C44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Configuration", "Authorization.Configuration\Authorization.Configuration.csproj", "{6944C77E-C650-4EAF-A9ED-CD68604D0C44}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authorization.Common", "Authorization.Common\Authorization.Common.csproj", "{D7FE1C61-06CA-48A0-AC6E-A02373898251}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{6944C77E-C650-4EAF-A9ED-CD68604D0C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6944C77E-C650-4EAF-A9ED-CD68604D0C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6944C77E-C650-4EAF-A9ED-CD68604D0C44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7FE1C61-06CA-48A0-AC6E-A02373898251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7FE1C61-06CA-48A0-AC6E-A02373898251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7FE1C61-06CA-48A0-AC6E-A02373898251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7FE1C61-06CA-48A0-AC6E-A02373898251}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,4 @@
-﻿using System;
-using Authorization.Contracts.Authorization;
+﻿using Authorization.Contracts.Authorization;
 using Authorization.Entities.Entities;
 using AutoMapper;
 
@@ -9,11 +8,10 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<UserParameters, UserEntity>()
-            .ForMember(destination => destination.DateOfCreate, options => options.MapFrom(_ => DateTime.UtcNow));
+        CreateMap<UserParameters, UserEntity>();
 
         CreateMap<UserEntity, UserModel>()
-            .ForMember(destination => destination.Password, options => options.MapFrom(c => c.Password));
+            .ForMember(destination => destination.Password, options => options.MapFrom(c => c.PasswordHash));
 
         CreateMap<UserEntity, AuthenticateResponse>();
     }
