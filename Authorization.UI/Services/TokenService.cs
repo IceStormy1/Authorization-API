@@ -1,7 +1,7 @@
 ﻿using IdentityModel.Client;
 using Microsoft.Extensions.Options;
 
-namespace Client.Services
+namespace Authorization.UI.Services
 {
     public class TokenService : ITokenService
     {

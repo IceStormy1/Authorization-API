@@ -1,4 +1,4 @@
-﻿namespace Client.Services
+﻿namespace Authorization.UI.Services
 {
 	public class IdentityServerSettings
 	{

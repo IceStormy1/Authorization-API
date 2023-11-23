@@ -1,16 +1,9 @@
-﻿
-using Client.Services;
+﻿using Authorization.UI.Models;
+using Authorization.UI.Services;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Client.Models;
 
-
-namespace Client.Pages
+namespace Authorization.UI.Pages
 {
     public partial class CoffeeShops
     {

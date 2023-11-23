@@ -1,4 +1,4 @@
-﻿namespace Client.Models
+﻿namespace Authorization.UI.Models
 {
     public class CoffeeShopModel
     {
