@@ -2,13 +2,13 @@
 using Authorization.Abstractions.Jwt;
 using Authorization.Core.Authorization;
 using Authorization.Sql;
+using Authorization.Sql.Extensions;
 using Authorization.Sql.Repositories;
 using IdentityServer4;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -162,8 +162,7 @@ public static class ServiceCollectionExtensions
         return services.AddDbContextPool<AuthorizationDbContext>(x
             =>
         {
-            x.UseNpgsql(configuration.GetConnectionString("Authorization"));
-            x.EnableSensitiveDataLogging();
+            x.DefaultDataBaseConfiguration(configuration, "Authorization");
         });
     }
 

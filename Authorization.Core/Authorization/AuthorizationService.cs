@@ -1,7 +1,6 @@
 ﻿using Authorization.Abstractions.Authorization;
 using Authorization.Contracts.Authorization;
 using Authorization.Entities.Entities;
-using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +14,6 @@ namespace Authorization.Core.Authorization;
 public class AuthorizationService : IAuthorizationService
 {
     private readonly IAuthorizationRepository _authorizationRepository;
-    private readonly IMapper _mapper;
     private readonly ILogger<AuthorizationService> _logger;
 
     private readonly SignInManager<UserEntity> _signInManager;
@@ -24,14 +22,12 @@ public class AuthorizationService : IAuthorizationService
 
     public AuthorizationService(
         IAuthorizationRepository authorizationRepository,
-        IMapper mapper,
         JwtHelper jwtHelper, 
         SignInManager<UserEntity> signInManager, 
         UserManager<UserEntity> userManager,
         ILogger<AuthorizationService> logger)
     {
         _authorizationRepository = authorizationRepository;
-        _mapper = mapper;
         _jwtHelper = jwtHelper;
         _signInManager = signInManager;
         _userManager = userManager;
@@ -40,14 +36,14 @@ public class AuthorizationService : IAuthorizationService
 
     public async Task<UserModel> GetUserById(Guid userId)
     {
-        var user = await _authorizationRepository.GetUserById(userId);
+        var user = await _authorizationRepository.GetUserById(Guid.Parse("53ceaf90-8d0c-4321-bfc7-d33b47bb55be"));
 
-        return _mapper.Map<UserModel>(user);
+        return new UserModel();
     }
 
     public async Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserParameters user)
     {
-        var userEntity = _mapper.Map<UserEntity>(user);
+        var userEntity = new UserEntity();
 
         return await _authorizationRepository.CreateUser(userEntity);
     }

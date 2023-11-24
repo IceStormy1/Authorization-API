@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,7 @@ public sealed class MigrationTool
             using var scope = _rootServiceProvider.CreateScope();
 
             var dbContextCollection = ResolveDbContextCollection(scope.ServiceProvider);
-
+        
             foreach (var dbContext in dbContextCollection)
             {
                 _logger.LogInformation("Migrating DbContext '{DbContext}'...", dbContext.GetType());
@@ -55,5 +56,6 @@ public sealed class MigrationTool
     private static IEnumerable<DbContext> ResolveDbContextCollection(IServiceProvider serviceProvider)
     {
         yield return serviceProvider.GetRequiredService<AuthorizationDbContext>();
+        yield return serviceProvider.GetRequiredService<PersistedGrantDbContext>();
     }
 }

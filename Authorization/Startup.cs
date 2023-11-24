@@ -1,5 +1,4 @@
 using Authorization.Configuration;
-using Authorization.Core;
 using Authorization.Core.Authorization;
 using Authorization.Entities.Entities;
 using Authorization.Identity;
@@ -16,7 +15,6 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -25,6 +23,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
 using System.Globalization;
 using System.IO;
+using Authorization.Sql.Extensions;
 using Resources = Authorization.Identity.Resources;
 
 namespace Authorization;
@@ -92,7 +91,21 @@ public class Startup
             .AddInMemoryIdentityResources(Resources.Get())
             .AddJwtBearerClientAuthentication()
             .AddAppAuthRedirectUriValidator()
-            .AddProfileService<AuthorizationService>();
+            .AddProfileService<AuthorizationService>()
+            // this adds the operational data from DB (codes, tokens, consents)
+            .AddOperationalStore(options =>
+            {
+                options.ConfigureDbContext = dbContextOptionsBuilder
+                    => dbContextOptionsBuilder.DefaultDataBaseConfiguration(
+                        configuration: Configuration,
+                        dbName: "Authorization",
+                        npgsqlOptionsAction: builder => builder.MigrationsAssembly(typeof(MigrationTool).Assembly.GetName().Name)
+                        );
+               
+                // this enables automatic token cleanup. this is optional.
+                options.EnableTokenCleanup = true;
+                //options.TokenCleanupInterval = 15; // frequency in seconds to cleanup stale grants. 15 is useful during debugging
+            });
 
         services.AddControllersWithViews();
 
@@ -116,8 +129,6 @@ public class Startup
                 cfg.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 cfg.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
             });
-
-        services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfile).Assembly));
 
         services.AddSwaggerGen(c =>
         {
