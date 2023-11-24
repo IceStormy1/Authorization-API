@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using Authorization.Common;
+﻿using Authorization.Common;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
+using System.Collections.Generic;
 
 namespace Authorization.Identity;
 
@@ -12,12 +13,10 @@ public static class ApiResources
         var claims = new List<string>
         {
             "snils",
-            "birthdate",
             "middle_name",
             "first_name",
             "last_name",
-            "gender",
-            "id"
+            JwtClaimTypes.Subject
         };
 
         return new ApiResource[]
@@ -25,11 +24,11 @@ public static class ApiResources
             new()
             {
                 Name = ClientConstants.TheaterClientName,
+                DisplayName = ClientConstants.TheaterClientName,
                 ApiSecrets = new Secret[]
                 {
                     new(ClientConstants.ClientSecret.Sha256())
                 },
-                //TODO. Прописать клеймы клиента
                 UserClaims = claims,
                 Scopes = new List<string>
                 {
@@ -37,7 +36,25 @@ public static class ApiResources
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
                     IdentityServerConstants.StandardScopes.Phone,
-                    "se_token",
+                    $"{ClientConstants.TheaterClientName}.read",
+                    $"{ClientConstants.TheaterClientName}.write"
+                },
+            },
+            new()
+            {
+                Name = ClientConstants.TheaterClientId + ".interactive",
+                DisplayName = ClientConstants.TheaterClientId + ".interactive",
+                UserClaims = claims,
+                ApiSecrets = new Secret[]
+                {
+                    new(ClientConstants.ClientSecret.Sha256())
+                },
+                Scopes = new List<string>
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Email,
+                    IdentityServerConstants.StandardScopes.Phone,
                     $"{ClientConstants.TheaterClientName}.read",
                     $"{ClientConstants.TheaterClientName}.write"
                 },

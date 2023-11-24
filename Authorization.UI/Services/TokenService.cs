@@ -5,31 +5,33 @@ namespace Authorization.UI.Services
 {
     public class TokenService : ITokenService
     {
-        public readonly IOptions<IdentityServerSettings> identityServerSettings;
-        private readonly ILogger<TokenService> logger;
-        public readonly DiscoveryDocumentResponse discoveryDocument;
-        private readonly HttpClient httpClient;
+        public readonly IOptions<IdentityServerSettings> IdentityServerSettings;
+        private readonly ILogger<TokenService> _logger;
+        public readonly DiscoveryDocumentResponse DiscoveryDocument;
+        private readonly HttpClient _httpClient;
 
-        public TokenService(IOptions<IdentityServerSettings> identityServerSettings, ILogger<TokenService> logger)
+        public TokenService(
+            IOptions<IdentityServerSettings> identityServerSettings, 
+            ILogger<TokenService> logger)
         {
-            this.identityServerSettings = identityServerSettings;
-            this.logger = logger;
-            httpClient = new HttpClient();
-            discoveryDocument = httpClient.GetDiscoveryDocumentAsync(this.identityServerSettings.Value.DiscoveryUrl).Result;
+            IdentityServerSettings = identityServerSettings;
+            _logger = logger;
+            _httpClient = new HttpClient();
+            DiscoveryDocument = _httpClient.GetDiscoveryDocumentAsync(IdentityServerSettings.Value.DiscoveryUrl).Result;
 
-            if (discoveryDocument.IsError)
+            if (DiscoveryDocument.IsError)
             {
-                throw new Exception("Unable to get discovery document", discoveryDocument.Exception);
+                throw new Exception("Unable to get discovery document", DiscoveryDocument.Exception);
             }
         }
 
         public async Task<TokenResponse> GetToken(string scope)
         {
-            var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            var tokenResponse = await _httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
-                Address = discoveryDocument.TokenEndpoint,
-                ClientId = identityServerSettings.Value.ClientName,
-                ClientSecret = identityServerSettings.Value.ClientPassword,
+                Address = DiscoveryDocument.TokenEndpoint,
+                ClientId = "Theater.client.interactive",
+                ClientSecret = IdentityServerSettings.Value.ClientPassword,
                 Scope = scope
             });
 
@@ -37,7 +39,8 @@ namespace Authorization.UI.Services
             {
                 throw new Exception("Unable to get token", tokenResponse.Exception);
             }
-            logger.LogInformation($"Bearer {tokenResponse.AccessToken}");
+            _logger.LogInformation($"Bearer {tokenResponse.AccessToken}");
+
             return tokenResponse;
         }
     }

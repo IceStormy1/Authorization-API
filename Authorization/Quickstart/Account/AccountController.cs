@@ -15,7 +15,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Authorization.Entities.Entities;
 
@@ -35,9 +37,9 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
-		private readonly SignInManager<UserEntity> _signInManager;
+        private readonly SignInManager<UserEntity> _signInManager;
 
-		public AccountController(
+        public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
@@ -49,8 +51,8 @@ namespace IdentityServerHost.Quickstart.UI
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
-			_signInManager = signInManager;
-		}
+            _signInManager = signInManager;
+        }
 
         /// <summary>
         /// Entry point into the login workflow
@@ -66,7 +68,7 @@ namespace IdentityServerHost.Quickstart.UI
                 // we only have one option for logging in and it's an external provider
                 return RedirectToAction("Challenge", "External", new { scheme = vm.ExternalLoginScheme, returnUrl });
             }
-
+            
             return View(vm);
         }
 
@@ -111,8 +113,8 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 var user = await _signInManager.UserManager.FindByNameAsync(model.Username);
 
-				if (user is not null)
-				{
+                if (user is not null)
+                {
                     var userLogin = await _signInManager.CheckPasswordSignInAsync(user, model.Password, true);
 
                     if (userLogin == Microsoft.AspNetCore.Identity.SignInResult.Success)
@@ -134,7 +136,14 @@ namespace IdentityServerHost.Quickstart.UI
                         // issue authentication cookie with subject ID and username
                         var isuser = new IdentityServerUser(user.Id.ToString())
                         {
-                            DisplayName = user.UserName
+                            DisplayName = user.UserName,
+                            AdditionalClaims = new List<Claim>
+                            {
+                                new ("last_name", user.LastName),
+                                new ("first_name", user.FirstName),
+                                new ("middle_name", user.MiddleName ?? string.Empty),
+                                new ("snils", user.Snils ?? string.Empty)
+                            }
                         };
 
                         await HttpContext.SignInAsync(isuser, props);

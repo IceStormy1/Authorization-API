@@ -1,8 +1,8 @@
 using Authorization.UI.Services;
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +14,9 @@ builder.Services.AddHttpClient();
 builder.Services.Configure<IdentityServerSettings>(builder.Configuration.GetSection("IdentityServerSettings"));
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-builder.Services.AddAuthentication(options =>
+builder.Services
+    .AddBlazoredLocalStorage(options => options.JsonSerializerOptions.WriteIndented = true)
+    .AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
@@ -34,6 +36,21 @@ builder.Services.AddAuthentication(options =>
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.RequireHttpsMetadata = false;
+        options.UseTokenLifetime = true;
+        options.GetClaimsFromUserInfoEndpoint = true;
+        options.ClaimActions.MapAll();
+
+        //options.Events = new OpenIdConnectEvents
+        //{
+        //    OnUserInformationReceived = context =>
+        //    {
+        //        return Task.CompletedTask;
+        //    },
+        //    OnTokenResponseReceived = context =>
+        //    {
+        //        return Task.CompletedTask;
+        //    }
+        //};
     }
 );
 
@@ -42,9 +59,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-	app.UseExceptionHandler("/Error");
-	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-	app.UseHsts();
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
 app.UseStaticFiles();

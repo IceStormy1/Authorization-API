@@ -1,6 +1,5 @@
 ﻿using Authorization.Contracts.Authorization;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -51,16 +50,16 @@ public class AuthorizationController : BaseController
     /// <param name="userId">Идентификатор пользователя</param>
     /// <response code="200">В случае, если пользователь был найден в системе</response>
     /// <response code="404">В случае если пользователь не был найден</response>
-    [HttpGet("api/auth/user/{userId:guid}")]
+    [HttpGet("api/auth/user/")]
     [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUserById([FromRoute] Guid userId)
+    public async Task<IActionResult> GetUserById()
     {
-        var user = await _authorizationService.GetUserById(userId);
+        var user = await _authorizationService.GetUserById(Guid.NewGuid());
          
         return user is null 
             ? NotFound()
-            : Ok(await _authorizationService.GetUserById(userId));
+            : Ok(user);
     }
 
     /// <summary>

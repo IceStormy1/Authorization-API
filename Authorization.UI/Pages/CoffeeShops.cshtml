@@ -1,12 +1,15 @@
 ﻿@page "/coffeeshops"
 @attribute [Authorize]
+@model Authorization.UI.Pages.CoffeeShops
+
+@using Microsoft.AspNetCore.Authorization
 
 <h3>Shops</h3>
 
 <div class="row">
-    @if (Shops.Any())
+    @if (Model.Shops.Any())
     {
-        @foreach (var shop in Shops)
+        @foreach (var shop in Model.Shops)
         {
             <div class="col-6 col-sm-12 col-md-6 col-lg-4 col-xl-4 mh-25 mb-4">
                 <div class="card shadow-sm rounded">
