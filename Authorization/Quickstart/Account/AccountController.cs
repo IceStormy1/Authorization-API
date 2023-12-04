@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Authorization.Common;
 using Authorization.Entities.Entities;
 using IdentityModel;
 using IdentityServer4;
@@ -130,7 +131,7 @@ public class AccountController : Controller
                         props = new AuthenticationProperties
                         {
                             IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(ClientConstants.TokenDuration)
                         };
                     };
 

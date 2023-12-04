@@ -1,5 +1,6 @@
 ﻿using System.Net.Security;
 using Authorization.Abstractions.Jwt;
+using Authorization.Common;
 using Authorization.Core.Authorization;
 using Authorization.Sql;
 using Authorization.Sql.Extensions;
@@ -38,7 +39,7 @@ public static class ServiceCollectionExtensions
             .Configure<CookieAuthenticationOptions>(IdentityServerConstants.DefaultCookieAuthenticationScheme, opts =>
             {
                 opts.SlidingExpiration = true;
-                opts.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                opts.ExpireTimeSpan = ClientConstants.TokenDuration;
                 //opts.EventsType = typeof(CustomCookieAuthenticationEvents);
 
             });

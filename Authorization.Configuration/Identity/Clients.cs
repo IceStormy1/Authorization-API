@@ -8,7 +8,7 @@ internal static class Clients
     public static List<Client> Get()
     {
         var clientSecret = ClientConstants.ClientSecret.Sha256();
-
+     
         return new List<Client>
         {
             // interactive client using code flow + pkce
@@ -38,6 +38,7 @@ internal static class Clients
                 RefreshTokenUsage = TokenUsage.ReUse,
                 AllowAccessTokensViaBrowser = true,
                 AlwaysIncludeUserClaimsInIdToken = true,
+                AccessTokenLifetime = (int)ClientConstants.TokenDuration.TotalSeconds
             }
         };
     }
