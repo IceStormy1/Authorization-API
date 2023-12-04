@@ -8,4 +8,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Authorization.Common\Authorization.Common.csproj" />
+	</ItemGroup>
+
 </Project>

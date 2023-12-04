@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Authorization.Common.Enums;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace Authorization.Entities.Entities;
 
@@ -24,6 +25,14 @@ public class UserEntity : IdentityUser<Guid>, IHasCreatedAt, IHasUpdatedAt
     /// СНИЛС
     /// </summary>
     public string Snils { get; set; }
+
+    /// <summary>
+    /// Дата рождения
+    /// </summary>
+    public DateOnly BirthDay { get; set; }
+
+    /// <inheritdoc cref="Common.Enums.Gender"/>
+    public Gender Gender { get; set; }
 
     /// <inheritdoc cref="IHasCreatedAt.CreatedAt"/>
     public DateTime CreatedAt { get; set; }
