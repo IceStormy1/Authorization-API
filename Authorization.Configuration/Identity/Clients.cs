@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
-using Authorization.Common;
+﻿using Authorization.Common;
 using IdentityServer4.Models;
 
-namespace Authorization.Identity;
+namespace Authorization.Configuration.Identity;
 
-public static class Clients
+internal static class Clients
 {
     public static List<Client> Get()
     {
         var clientSecret = ClientConstants.ClientSecret.Sha256();
+
         return new List<Client>
         {
             // interactive client using code flow + pkce
-            new Client
+            new()
             {
                 ClientId = ClientConstants.TheaterClientId + ".interactive",
                 ClientSecrets = { new Secret(clientSecret) },
@@ -39,7 +39,6 @@ public static class Clients
                 AllowAccessTokensViaBrowser = true,
                 AlwaysIncludeUserClaimsInIdToken = true,
             }
-
         };
     }
 }

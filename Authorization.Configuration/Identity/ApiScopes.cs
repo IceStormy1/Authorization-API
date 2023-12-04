@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using Authorization.Common;
+﻿using Authorization.Common;
 using IdentityServer4.Models;
 
-namespace Authorization.Identity;
+namespace Authorization.Configuration.Identity;
 
-public static class ApiScopes
+internal static class ApiScopes
 {
     public static List<ApiScope> Get()
     {

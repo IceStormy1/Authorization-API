@@ -31,7 +31,6 @@
     <ProjectReference Include="..\Authorization.Common\Authorization.Common.csproj" />
     <ProjectReference Include="..\Authorization.Configuration\Authorization.Configuration.csproj" />
     <ProjectReference Include="..\Authorization.Sql\Authorization.Sql.csproj" />
-    <ProjectReference Include="..\Authorization.Validation\Authorization.Validation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,9 +1,8 @@
 ﻿using IdentityServer4.Models;
-using System.Collections.Generic;
 
-namespace Authorization.Identity;
+namespace Authorization.Configuration.Identity;
 
-public static class Resources
+internal static class Resources
 {
     public static IEnumerable<IdentityResource> Get()
     {
@@ -18,8 +17,7 @@ public static class Resources
             new IdentityResources.OpenId(),
             profile,
             new IdentityResources.Email { Required = true, UserClaims = new[] { "email" } },
-            new IdentityResources.Phone { UserClaims = new[] { "phone" } },
-            new IdentityResource() { DisplayName = "External se-token", Name = "se_token", UserClaims = new List<string> { "se_token" } },
+            new IdentityResources.Phone { UserClaims = new[] { "phone" } }
         };
     }
 }

@@ -2,11 +2,10 @@
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
-using System.Collections.Generic;
 
-namespace Authorization.Identity;
+namespace Authorization.Configuration.Identity;
 
-public static class ApiResources
+internal static class ApiResources
 {
     public static IEnumerable<ApiResource> Get()
     {

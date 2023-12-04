@@ -1,10 +1,6 @@
 using Authorization.Configuration;
-using Authorization.Core.Authorization;
 using Authorization.Entities.Entities;
-using Authorization.Identity;
 using Authorization.Sql;
-using Authorization.Validation.Authorization;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,10 +17,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
-using System.Globalization;
 using System.IO;
-using Authorization.Sql.Extensions;
-using Resources = Authorization.Identity.Resources;
 
 namespace Authorization;
 
@@ -46,7 +39,7 @@ public class Startup
     {
         services.AddIdentity<UserEntity, IdentityRole<Guid>>(options =>
             {
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
 
                 options.Password.RequiredLength = 4;
                 options.Password.RequireDigit = false;
@@ -68,44 +61,7 @@ public class Startup
             .ConfigureOptions(Configuration)
             .AddAllDbContext(Configuration)
             .AddRouting(c => c.LowercaseUrls = true)
-            .AddIdentityServer(options =>
-            {
-                options.Events.RaiseSuccessEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-
-                options.EmitScopesAsSpaceDelimitedStringInJwt = true;
-
-                options.MutualTls.Enabled = false;
-                options.MutualTls.DomainName = "mtls";
-                options.UserInteraction.LoginUrl = "/Account/Login";
-                options.UserInteraction.LogoutUrl = "/Account/Logout";
-                //options.MutualTls.AlwaysEmitConfirmationClaim = true;
-            })
-            .AddAspNetIdentity<UserEntity>()
-            .AddDeveloperSigningCredential()
-            .AddInMemoryClients(Clients.Get())
-            .AddInMemoryApiResources(ApiResources.Get())
-            .AddInMemoryApiScopes(ApiScopes.Get())
-            .AddInMemoryIdentityResources(Resources.Get())
-            .AddJwtBearerClientAuthentication()
-            .AddAppAuthRedirectUriValidator()
-            .AddProfileService<AuthorizationService>()
-            // this adds the operational data from DB (codes, tokens, consents)
-            .AddOperationalStore(options =>
-            {
-                options.ConfigureDbContext = dbContextOptionsBuilder
-                    => dbContextOptionsBuilder.DefaultDataBaseConfiguration(
-                        configuration: Configuration,
-                        dbName: "Authorization",
-                        npgsqlOptionsAction: builder => builder.MigrationsAssembly(typeof(MigrationTool).Assembly.GetName().Name)
-                        );
-               
-                // this enables automatic token cleanup. this is optional.
-                options.EnableTokenCleanup = true;
-                //options.TokenCleanupInterval = 15; // frequency in seconds to cleanup stale grants. 15 is useful during debugging
-            });
+            .RegisterIdentityServer(Configuration);
 
         services.AddControllersWithViews();
 
@@ -145,13 +101,6 @@ public class Startup
         });
 
         services.AddMvc(opt => { opt.EnableEndpointRouting = false; })
-            .AddFluentValidation(fv =>
-            {
-                fv.RegisterValidatorsFromAssemblyContaining<UserParametersValidator>();
-
-                fv.ValidatorOptions.LanguageManager.Enabled = true;
-                fv.ValidatorOptions.LanguageManager.Culture = new CultureInfo("ru-RU");
-            })
             .AddSessionStateTempDataProvider();
 
         services.AddCors(options =>

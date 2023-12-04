@@ -1,10 +1,9 @@
-﻿namespace Authorization.UI.Models
+﻿namespace Authorization.UI.Models;
+
+public class CoffeeShopModel
 {
-    public class CoffeeShopModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string OpeningHours { get; set; }
-        public string Address { get; set; }
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string OpeningHours { get; set; }
+    public string Address { get; set; }
 }

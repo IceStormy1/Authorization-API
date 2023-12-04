@@ -1,9 +1,8 @@
 ﻿using IdentityModel.Client;
 
-namespace Authorization.UI.Services
+namespace Authorization.UI.Services;
+
+public interface ITokenService
 {
-	public interface ITokenService
-	{
-		Task<TokenResponse> GetToken(string scope);
-	}
+    Task<TokenResponse> GetToken(string scope);
 }

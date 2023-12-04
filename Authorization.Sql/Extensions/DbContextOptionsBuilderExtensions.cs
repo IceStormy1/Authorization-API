@@ -11,13 +11,15 @@ public static class DbContextOptionsBuilderExtensions
         this DbContextOptionsBuilder builder, 
         IConfiguration configuration,
         string dbName,
-        Action<NpgsqlDbContextOptionsBuilder> npgsqlOptionsAction = null)
+        Action<NpgsqlDbContextOptionsBuilder> npgSqlOptionsAction = null)
     {
         builder.UseNpgsql(
             connectionString: configuration.GetConnectionString(dbName), 
-            npgsqlOptionsAction: npgsqlOptionsAction);
+            npgsqlOptionsAction: npgSqlOptionsAction);
 
+#if DEBUG
         builder.EnableSensitiveDataLogging();
+#endif
 
         return builder;
     }

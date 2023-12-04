@@ -14,6 +14,7 @@ internal sealed class UserEntityConfiguration : IEntityTypeConfiguration<UserEnt
        builder.Property(x => x.PasswordHash).IsRequired();
        builder.Property(x => x.FirstName).HasMaxLength(50).IsRequired();
        builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
+       builder.Property(x => x.MiddleName).HasMaxLength(50);
 
        builder.HasIndex(x => x.UserName).IsUnique();
        builder.HasIndex(x => new { x.LastName, x.FirstName, x.MiddleName, x.Snils });

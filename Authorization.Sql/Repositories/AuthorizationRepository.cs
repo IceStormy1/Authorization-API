@@ -15,18 +15,6 @@ public class AuthorizationRepository : IAuthorizationRepository
         _authorizationDbContext = authorizationDbContext;
     }
 
-    public async Task<UserEntity> GetUserById(Guid userId)
-        => await _authorizationDbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(user => user.Id == userId);
-
-    public async Task<UserEntity> FindUser(string userName, string password)
-        => await _authorizationDbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(user => string.Equals(password, user.PasswordHash)
-                                         && (string.Equals(user.UserName, userName)
-                                             || string.Equals(user.Email, userName)));
-
     public async Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserEntity userEntity)
     {
         var user = await _authorizationDbContext.Users

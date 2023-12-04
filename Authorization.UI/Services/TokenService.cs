@@ -1,47 +1,46 @@
 ﻿using IdentityModel.Client;
 using Microsoft.Extensions.Options;
 
-namespace Authorization.UI.Services
+namespace Authorization.UI.Services;
+
+public class TokenService : ITokenService
 {
-    public class TokenService : ITokenService
+    public readonly IOptions<IdentityServerSettings> IdentityServerSettings;
+    private readonly ILogger<TokenService> _logger;
+    public readonly DiscoveryDocumentResponse DiscoveryDocument;
+    private readonly HttpClient _httpClient;
+
+    public TokenService(
+        IOptions<IdentityServerSettings> identityServerSettings, 
+        ILogger<TokenService> logger)
     {
-        public readonly IOptions<IdentityServerSettings> IdentityServerSettings;
-        private readonly ILogger<TokenService> _logger;
-        public readonly DiscoveryDocumentResponse DiscoveryDocument;
-        private readonly HttpClient _httpClient;
+        IdentityServerSettings = identityServerSettings;
+        _logger = logger;
+        _httpClient = new HttpClient();
+        DiscoveryDocument = _httpClient.GetDiscoveryDocumentAsync(IdentityServerSettings.Value.DiscoveryUrl).Result;
 
-        public TokenService(
-            IOptions<IdentityServerSettings> identityServerSettings, 
-            ILogger<TokenService> logger)
+        if (DiscoveryDocument.IsError)
         {
-            IdentityServerSettings = identityServerSettings;
-            _logger = logger;
-            _httpClient = new HttpClient();
-            DiscoveryDocument = _httpClient.GetDiscoveryDocumentAsync(IdentityServerSettings.Value.DiscoveryUrl).Result;
-
-            if (DiscoveryDocument.IsError)
-            {
-                throw new Exception("Unable to get discovery document", DiscoveryDocument.Exception);
-            }
+            throw new Exception("Unable to get discovery document", DiscoveryDocument.Exception);
         }
+    }
 
-        public async Task<TokenResponse> GetToken(string scope)
+    public async Task<TokenResponse> GetToken(string scope)
+    {
+        var tokenResponse = await _httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
         {
-            var tokenResponse = await _httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-            {
-                Address = DiscoveryDocument.TokenEndpoint,
-                ClientId = "Theater.client.interactive",
-                ClientSecret = IdentityServerSettings.Value.ClientPassword,
-                Scope = scope
-            });
+            Address = DiscoveryDocument.TokenEndpoint,
+            ClientId = "Theater.client.interactive",
+            ClientSecret = IdentityServerSettings.Value.ClientPassword,
+            Scope = scope
+        });
 
-            if (tokenResponse.IsError)
-            {
-                throw new Exception("Unable to get token", tokenResponse.Exception);
-            }
-            _logger.LogInformation($"Bearer {tokenResponse.AccessToken}");
-
-            return tokenResponse;
+        if (tokenResponse.IsError)
+        {
+            throw new Exception("Unable to get token", tokenResponse.Exception);
         }
+        _logger.LogInformation($"Bearer {tokenResponse.AccessToken}");
+
+        return tokenResponse;
     }
 }

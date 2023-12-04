@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Authorization.Common\Authorization.Common.csproj" />
     <ProjectReference Include="..\Authorization.Core\Authorization.Core.csproj" />
     <ProjectReference Include="..\Authorization.Sql\Authorization.Sql.csproj" />
   </ItemGroup>

@@ -140,11 +140,7 @@ public static class ServiceCollectionExtensions
             .Where(x => x.Name.EndsWith(ServiceSuffix) && !x.IsAbstract && !x.IsInterface)
             .ToList();
 
-        services
-            .AddSingleton<JwtHelper>()
-            .RegisterImplementations(serviceTypes);
-
-        return services;
+        return services.RegisterImplementations(serviceTypes);
     }
 
     public static IServiceCollection AddRepositories(this IServiceCollection services)
@@ -160,10 +156,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddAllDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         return services.AddDbContextPool<AuthorizationDbContext>(x
-            =>
-        {
-            x.DefaultDataBaseConfiguration(configuration, "Authorization");
-        });
+            => x.DefaultDataBaseConfiguration(configuration, "Authorization")
+        );
     }
 
     private static IServiceCollection RegisterImplementations(this IServiceCollection services, IEnumerable<Type> implementationTypes)

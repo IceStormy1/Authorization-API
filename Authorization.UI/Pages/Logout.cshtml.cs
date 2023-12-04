@@ -4,26 +4,25 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Authorization.UI.Pages
+namespace Authorization.UI.Pages;
+
+public class LogoutModel : PageModel
 {
-    public class LogoutModel : PageModel
+    private readonly IConfiguration config;
+
+    public LogoutModel(IConfiguration config)
     {
-        private readonly IConfiguration config;
+        this.config = config;
+    }
 
-		public LogoutModel(IConfiguration config)
-		{
-            this.config = config;
-		}
-
-        public async Task<IActionResult> OnGetAsync()
-        {
-            return SignOut(
-                new AuthenticationProperties
-                {
-                    RedirectUri = config["applicationUrl"]
-                },
-                OpenIdConnectDefaults.AuthenticationScheme,
-                CookieAuthenticationDefaults.AuthenticationScheme);
-        }
+    public async Task<IActionResult> OnGetAsync()
+    {
+        return SignOut(
+            new AuthenticationProperties
+            {
+                RedirectUri = config["applicationUrl"]
+            },
+            OpenIdConnectDefaults.AuthenticationScheme,
+            CookieAuthenticationDefaults.AuthenticationScheme);
     }
 }

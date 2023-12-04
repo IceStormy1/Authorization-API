@@ -11,20 +11,6 @@ namespace Authorization.Abstractions.Authorization;
 public interface IAuthorizationRepository
 {
     /// <summary>
-    /// Получить пользователя по уникальному идентификатору
-    /// </summary>
-    /// <param name="userId">Идентификатор пользователя</param>
-    /// <returns>Возвращает данные пользователя</returns>
-    Task<UserEntity> GetUserById(Guid userId);
-
-    /// <summary>
-    /// Получить пользователя по его никнейму
-    /// </summary>
-    /// <param name="userName">Никнейм пользователя</param>
-    /// <param name="password">Пароль пользователя</param>
-    Task<UserEntity> FindUser(string userName, string password);
-
-    /// <summary>
     /// Создать пользователя
     /// </summary>
     /// <param name="userEntity">Данные пользователя</param>
