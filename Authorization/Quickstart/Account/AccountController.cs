@@ -135,8 +135,9 @@ public class AccountController : Controller
                         };
                     };
 
-                    // issue authentication cookie with subject ID and username
-                    var isuser = new IdentityServerUser(user.Id.ToString())
+                    var userRoles = await _userManager.GetRolesAsync(user);
+
+                    var identityServerUser = new IdentityServerUser(user.Id.ToString())
                     {
                         DisplayName = user.UserName,
                         AdditionalClaims = new List<Claim>
@@ -149,10 +150,11 @@ public class AccountController : Controller
                             new(JwtClaimTypes.PhoneNumber, user.PhoneNumber ?? string.Empty),
                             new(JwtClaimTypes.Gender, user.Gender.ToString()),
                             new(JwtClaimTypes.Email, user.Email ?? string.Empty),
+                            new(JwtClaimTypes.Role, string.Join(' ', userRoles))
                         }
                     };
 
-                    await HttpContext.SignInAsync(isuser, props);
+                    await HttpContext.SignInAsync(identityServerUser, props);
 
                     if (context != null)
                     {
@@ -172,15 +174,14 @@ public class AccountController : Controller
                     {
                         return Redirect(model.ReturnUrl);
                     }
-                    else if (string.IsNullOrEmpty(model.ReturnUrl))
+
+                    if (string.IsNullOrEmpty(model.ReturnUrl))
                     {
                         return Redirect("~/");
                     }
-                    else
-                    {
-                        // user might have clicked on a malicious link - should be logged
-                        throw new Exception("invalid return URL");
-                    }
+
+                    // user might have clicked on a malicious link - should be logged
+                    throw new Exception("invalid return URL");
                 }
             }
 
@@ -217,11 +218,18 @@ public class AccountController : Controller
             LastName = viewModel.LastName,
             MiddleName = viewModel.MiddleName,
             Snils = viewModel.Snils,
-            PhoneNumber = viewModel.Phone
+            PhoneNumber = viewModel.Phone,
+            Roles = new List<IdentityUserRole<Guid>>
+            {
+                new()
+                {
+                    RoleId = RoleConstants.UserRoleId
+                }
+            }
         };
 
         var result = await _userManager.CreateAsync(user, viewModel.Password);
-
+        
         if (result.Succeeded)
         {
             var loginModel = new LoginInputModel

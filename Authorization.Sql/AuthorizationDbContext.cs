@@ -1,14 +1,16 @@
-﻿using Authorization.Entities.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using Authorization.Sql.Configurations;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-using System;
+﻿using Authorization.Common;
 using Authorization.Entities;
+using Authorization.Entities.Entities;
+using Authorization.Sql.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Authorization.Sql;
 
@@ -36,15 +38,27 @@ public class AuthorizationDbContext : IdentityDbContext<UserEntity, IdentityRole
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+    
+        modelBuilder.Entity<IdentityRole<Guid>>(entity =>
+        {
+            entity.ToTable(name: "Roles");
+            entity.HasData(new List<IdentityRole<Guid>>
+            {
+                new()
+                {
+                    Id = RoleConstants.AdminRoleId,
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+                new()
+                {
+                    Id = RoleConstants.UserRoleId,
+                    Name = "User",
+                    NormalizedName = "USER"
+                }
+            });
+        });
 
-        var assembly = Assembly.GetAssembly(typeof(UserEntityConfiguration))!;
-        modelBuilder.ApplyConfigurationsFromAssembly(assembly);
-
-        modelBuilder.Entity<IdentityRole<Guid>>(entity => entity.ToTable(name: "Roles"));
-        
-        modelBuilder.Entity<IdentityUserRole<Guid>>(entity =>
-            entity.ToTable(name: "UserRoles"));
-      
         modelBuilder.Entity<IdentityUserClaim<Guid>>(entity =>
             entity.ToTable(name: "UserClaims"));
        
@@ -56,6 +70,9 @@ public class AuthorizationDbContext : IdentityDbContext<UserEntity, IdentityRole
         
         modelBuilder.Entity<IdentityRoleClaim<Guid>>(entity =>
             entity.ToTable("RoleClaims"));
+
+        var assembly = Assembly.GetAssembly(typeof(UserEntityConfiguration))!;
+        modelBuilder.ApplyConfigurationsFromAssembly(assembly);
     }
 
     private void SetDates()

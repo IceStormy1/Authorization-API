@@ -1,6 +1,7 @@
 ﻿using Authorization.Common.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace Authorization.Entities.Entities;
 
@@ -39,4 +40,7 @@ public class UserEntity : IdentityUser<Guid>, IHasCreatedAt, IHasUpdatedAt
 
     /// <inheritdoc cref="IHasUpdatedAt.UpdatedAt"/>
     public DateTime? UpdatedAt { get; set; }
+
+    /// <inheritdoc cref="IdentityUserRole{Guid}"/>
+    public List<IdentityUserRole<Guid>> Roles { get; set; } = new();
 }
