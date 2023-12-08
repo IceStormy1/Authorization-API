@@ -148,13 +148,7 @@ public class Startup
             ForwardedHeaders = ForwardedHeaders.All
         });
 
-        app.UseStaticFiles(
-        //    new StaticFileOptions
-        //{
-        //    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Views/Styles")),
-        //    RequestPath = "/Views/styles"
-        //}
-        );
+        app.UseStaticFiles();
 
         app.UseStatusCodePages();
 
@@ -172,8 +166,8 @@ public class Startup
             c.RoutePrefix = string.Empty;
             c.DocumentTitle = $"{ApiName} Documentation";
             c.DocExpansion(DocExpansion.None);
-        });
-
+        }); 
+        
         app.UseAuthentication();
         app.UseAuthorization();
 
