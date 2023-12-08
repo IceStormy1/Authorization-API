@@ -1,10 +1,9 @@
-﻿namespace Authorization.Contracts.Authorization
+﻿namespace Authorization.Contracts.Authorization;
+
+public class UserParameters : UserBase
 {
-    public class UserParameters : UserBase
-    {
-        /// <summary>
-        /// Email пользователя
-        /// </summary>
-        public string Email { get; set; }
-    }
+    /// <summary>
+    /// Email пользователя
+    /// </summary>
+    public string Email { get; set; }
 }

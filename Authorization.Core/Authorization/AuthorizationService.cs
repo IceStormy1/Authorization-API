@@ -1,64 +1,60 @@
 ﻿using Authorization.Abstractions.Authorization;
-using Authorization.Abstractions.Jwt;
 using Authorization.Contracts.Authorization;
 using Authorization.Entities.Entities;
-using AutoMapper;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IdentityServer4.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
-namespace Authorization.Core.Authorization
+namespace Authorization.Core.Authorization;
+
+public class AuthorizationService : IAuthorizationService
 {
-    public class AuthorizationService : IAuthorizationService
+    private readonly IAuthorizationRepository _authorizationRepository;
+    private readonly ILogger<AuthorizationService> _logger;
+
+    private readonly UserManager<UserEntity> _userManager;
+
+    public AuthorizationService(
+        IAuthorizationRepository authorizationRepository,
+        UserManager<UserEntity> userManager,
+        ILogger<AuthorizationService> logger)
     {
-        private readonly IAuthorizationRepository _authorizationRepository;
-        private readonly IMapper _mapper;
+        _authorizationRepository = authorizationRepository;
+        _userManager = userManager;
+        _logger = logger;
+    }
 
-        private static JwtOptions _jwtOptions;
+    public async Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserParameters user)
+    {
+        var userEntity = new UserEntity();
 
-        public AuthorizationService(
-            IAuthorizationRepository authorizationRepository,
-            IMapper mapper,
-            IOptions<JwtOptions> jwOptions)
-        {
-            _authorizationRepository = authorizationRepository;
-            _mapper = mapper;
-            _jwtOptions = jwOptions.Value;
-        }
+        return await _authorizationRepository.CreateUser(userEntity);
+    }
 
-        public async Task<UserModel> GetUserById(Guid userId)
-        {
-            var user = await _authorizationRepository.GetUserById(userId);
+    public Task GetProfileDataAsync(ProfileDataRequestContext context)
+    {
+        context.IssuedClaims.AddRange(context.Subject.Claims);
 
-            return _mapper.Map<UserModel>(user);
-        }
+        context.LogIssuedClaims(_logger);
 
-        public async Task<IList<UserModel>> GetUsers()
-        {
-            var users = await _authorizationRepository.GetUsers();
+        return Task.CompletedTask;
+    }
 
-            return _mapper.Map<List<UserModel>>(users);
-        }
+    public async Task IsActiveAsync(IsActiveContext context)
+    {
+        var user = await GetUserByClaims(context.Subject);
 
-        public async Task<(bool IsSuccess, Guid? UserId)> CreateUser(UserParameters user)
-        {
-            var userEntity = _mapper.Map<UserEntity>(user);
+        context.IsActive = !user.LockoutEnd.HasValue;
+    }
 
-            return await _authorizationRepository.CreateUser(userEntity);
-        }
+    private async Task<UserEntity> GetUserByClaims(ClaimsPrincipal claims)
+    {
+        var userId = claims.FindFirst("sub")?.Value ?? throw new KeyNotFoundException("Не задан идентификатор ");
 
-        public async Task<AuthenticateResponse> Authorize(AuthenticateParameters authenticateParameters)
-        {
-            var userEntity = await _authorizationRepository
-                .FindUser(authenticateParameters.UserName, authenticateParameters.Password);
-
-            if (userEntity == null)
-                return null;
-
-            var token = new JwtHelper(_jwtOptions).GenerateJwtToken(userEntity);
-
-            return new AuthenticateResponse { Token = token };
-        }
+        return await _userManager.FindByIdAsync(userId) ?? throw new KeyNotFoundException("Не найден пользователь"); // TODO: сделать нормальный ошибки
     }
 }

@@ -1,32 +1,46 @@
-﻿using System;
+﻿using Authorization.Common.Enums;
+using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
 
-namespace Authorization.Entities.Entities
+namespace Authorization.Entities.Entities;
+
+public class UserEntity : IdentityUser<Guid>, IHasCreatedAt, IHasUpdatedAt
 {
-    public class UserEntity
-    {
-        /// <summary>
-        /// Идентификатор пользователя
-        /// </summary>
-        public Guid Id { get; set; }
+    /// <summary>
+    /// Имя 
+    /// </summary>
+    public string FirstName { get; set; }
 
-        /// <summary>
-        /// Никнейм пользователя
-        /// </summary>
-        public string UserName { get; set; }
+    /// <summary>
+    /// Фамилия 
+    /// </summary>
+    public string LastName { get; set; }
 
-        /// <summary>
-        /// Email пользователя
-        /// </summary>
-        public string Email { get; set; }
+    /// <summary>
+    /// Отчество
+    /// </summary>
+    public string MiddleName { get; set; }
 
-        /// <summary>
-        /// Пароль пользователя
-        /// </summary>
-        public string Password { get; set; }
+    /// <summary>
+    /// СНИЛС
+    /// </summary>
+    public string Snils { get; set; }
 
-        /// <summary>
-        /// Дата создания пользователя
-        /// </summary>
-        public DateTime DateOfCreate { get; set; }
-    }
+    /// <summary>
+    /// Дата рождения
+    /// </summary>
+    public DateOnly BirthDay { get; set; }
+
+    /// <inheritdoc cref="Common.Enums.Gender"/>
+    public Gender Gender { get; set; }
+
+    /// <inheritdoc cref="IHasCreatedAt.CreatedAt"/>
+    public DateTime CreatedAt { get; set; }
+
+    /// <inheritdoc cref="IHasUpdatedAt.UpdatedAt"/>
+    public DateTime? UpdatedAt { get; set; }
+
+    /// <inheritdoc cref="IdentityUserRole{Guid}"/>
+    public List<IdentityUserRole<Guid>> Roles { get; set; } = new();
 }

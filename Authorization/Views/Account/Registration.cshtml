@@ -1,0 +1,95 @@
+﻿@model RegisterInputModel
+
+<div class="login-page">
+
+    <div class="lead">
+        <h1>Registration</h1>
+    </div>
+
+    <partial name="_ValidationSummary"/>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Register Local Account</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Account" asp-action="Registration" method="post">
+                        <input type="hidden" asp-for="ReturnUrl"/>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input asp-for="Username" class="form-control"/>
+                            <span asp-validation-for="Username"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input asp-for="Password" class="form-control"/>
+                            <span asp-validation-for="Password"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm password</label>
+                            <input asp-for="ConfirmPassword" class="form-control"/>
+                            <span asp-validation-for="ConfirmPassword"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>First name</label>
+                            <input asp-for="FirstName" class="form-control"/>
+                            <span asp-validation-for="FirstName"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Last name</label>
+                            <input asp-for="LastName" class="form-control"/>
+                            <span asp-validation-for="LastName"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Middle name</label>
+                            <input asp-for="MiddleName" class="form-control"/>
+                            <span asp-validation-for="MiddleName"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <input asp-for="Gender" class="form-control"/>
+                            <span asp-validation-for="Gender"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Snils</label>
+                            <input asp-for="Snils" class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone number</label>
+                            <input asp-for="Phone" class="form-control"/>
+                            <span asp-validation-for="Phone"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input asp-for="Email" class="form-control" asp-format="Email"/>
+                            <span asp-validation-for="Email"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Birthday</label>
+                            <input asp-for="BirthDay" class="form-control"/>
+                            <span asp-validation-for="BirthDay"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="button">Sign up</button>
+                        </div>
+                        <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl"
+                           class="switch-button">
+                            Login
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
