@@ -1,2 +1,2 @@
 # Authorization-API
-Authorization with using JWT
+Authorization with using IdentityServer 4
