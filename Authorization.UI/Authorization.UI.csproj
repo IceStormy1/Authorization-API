@@ -1,14 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>78d54860-8d36-4805-9d78-d1e4ffa83356</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
     <PackageReference Include="IdentityModel" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.0" />
   </ItemGroup>
-
 </Project>

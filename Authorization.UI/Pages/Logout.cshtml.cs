@@ -15,7 +15,7 @@ public class LogoutModel : PageModel
         this.config = config;
     }
 
-    public async Task<IActionResult> OnGetAsync()
+    public IActionResult OnGetAsync()
     {
         return SignOut(
             new AuthenticationProperties

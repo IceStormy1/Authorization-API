@@ -6,6 +6,7 @@
 	  <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
 	  <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <UserSecretsId>8db04b2a-970c-4d9e-ae5a-7be40b1e9474</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
