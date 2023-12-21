@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+    .AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -39,6 +43,11 @@ builder.Services
         options.UseTokenLifetime = true;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.ClaimActions.MapAll();
+       
+        options.BackchannelHttpHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };// TODO: убрать после добавления сертификата
 
         //options.Events = new OpenIdConnectEvents
         //{
@@ -64,7 +73,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseStaticFiles();
+app.UseHttpsRedirection()
+    .UseStaticFiles();
+
 app.UseCookiePolicy(new CookiePolicyOptions { Secure = CookieSecurePolicy.Always });
 app.UseRouting();
 

@@ -49,14 +49,19 @@ public class Startup
             .AddEntityFrameworkStores<AuthorizationDbContext>()
             .AddDefaultTokenProviders();
 
-        services.AddSameSiteCookiePolicy()
+        services //.AddSameSiteCookiePolicy()
+            .AddAntiforgery(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            })
             .ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "Auth.IdentityCookie";
                 config.LoginPath = "/Account/Login";
                 config.LogoutPath = "/Account/Logout";
                 config.Cookie.SameSite = SameSiteMode.Lax;
-                config.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                config.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             })
             .ConfigureOptions(Configuration)
             .AddAllDbContext(Configuration)
@@ -126,13 +131,15 @@ public class Startup
         if (env.IsDevelopment())
             app.UseDeveloperExceptionPage();
 
-        app.UseCors(options =>
-        {
-            options.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
-
+        app.UseHttpsRedirection()
+            .UseHsts()
+            .UseCors(options =>
+            {
+                options.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+     
         app.Use(async (context, next) =>
         {
             context.Request.EnableBuffering();
