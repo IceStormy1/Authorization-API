@@ -20,7 +20,7 @@ internal static class Clients
                 AccessTokenType = AccessTokenType.Reference,
                 RedirectUris =
                 {
-                    "http://localhost:5444/signin-oidc",
+                    "https://localhost:5444/signin-oidc",
                     "https://192.168.1.112:8085/signin-oidc",
                     "https://localhost:8085/signin-oidc",
                     "http://127.0.0.1:5173/auth/signinwin/main",
@@ -29,7 +29,7 @@ internal static class Clients
                 FrontChannelLogoutUri = "http://localhost:5445/signout-oidc",
                 PostLogoutRedirectUris =
                 {
-                    "http://localhost:5444/signout-callback-oidc",
+                    "https://localhost:5444/signout-callback-oidc",
                     "https://192.168.1.112:8085/signout-callback-oidc",
                     "https://localhost:8085/signout-callback-oidc",
                     "http://127.0.0.1:5173/signout-callback-oidc",
