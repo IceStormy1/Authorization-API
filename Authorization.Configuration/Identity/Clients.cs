@@ -25,6 +25,8 @@ internal static class Clients
                     "https://localhost:8085/signin-oidc",
                     "http://127.0.0.1:5173/auth/signinwin/main",
                     "http://localhost:8080/auth/signinwin/main",
+                    "http://localhost:8090/auth/signinwin/main",
+                    "http://localhost/auth/signinwin/main",
                 },
                 FrontChannelLogoutUri = "http://localhost:5445/signout-oidc",
                 PostLogoutRedirectUris =
@@ -33,7 +35,10 @@ internal static class Clients
                     "https://192.168.1.112:8085/signout-callback-oidc",
                     "https://localhost:8085/signout-callback-oidc",
                     "http://127.0.0.1:5173/signout-callback-oidc",
-                    "http://127.0.0.1:5173/"
+                    "http://127.0.0.1:5173/",
+                    "http://localhost:8080",
+                    "http://localhost:8090",
+                    "http://localhost",
                 },
                 AllowOfflineAccess = true,
                 AllowedCorsOrigins = new List<string>
@@ -41,7 +46,9 @@ internal static class Clients
                     "http://127.0.0.1:5173",
                     "https://192.168.1.112:8085",
                     "https://localhost:8085",
-                    "http://localhost:8080"
+                    "http://localhost:8080",
+                    "http://localhost:8090",
+                    "http://localhost",
                 },
                 AllowedScopes =
                 {
